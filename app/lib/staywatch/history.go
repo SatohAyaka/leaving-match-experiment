@@ -1,0 +1,5 @@
+package staywatch
+
+func History() {
+
+}

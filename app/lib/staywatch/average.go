@@ -1,0 +1,3 @@
+package staywatch
+
+func Average(){}
