@@ -24,7 +24,11 @@ func StayWatch() {
 			fmt.Println("終了します.")
 			os.Exit(0)
 		case "3":
-			staywatch.History()
+			logs := staywatch.History()
+			for _, log := range logs {
+				fmt.Printf("ID: %d | Name: %s | EndAt: %s | Room: %s\n",
+					log.ID, log.Name, log.EndAt, log.Room)
+			}
 			return
 		case "4":
 			staywatch.Ratio()

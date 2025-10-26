@@ -1,3 +1,3 @@
 package staywatch
 
-func Average(){}
+func Average() {}
