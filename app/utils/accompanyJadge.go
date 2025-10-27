@@ -11,12 +11,20 @@ func AccompanyJadgement(data model.GetLogResponse) []model.LogJSON {
 	var result []model.LogJSON
 
 	for i := 0; i < len(logs); i++ {
+		if logs[i].EndAt == "2016-01-01 00:00:00" {
+			continue
+		}
+
 		endI, err := time.Parse(layout, logs[i].EndAt)
 		if err != nil {
 			continue
 		}
 
 		for j := i + 1; j < len(logs); j++ {
+			if logs[j].EndAt == "2016-01-01 00:00:00" {
+				continue
+			}
+
 			endJ, err := time.Parse(layout, logs[j].EndAt)
 			if err != nil {
 				continue
