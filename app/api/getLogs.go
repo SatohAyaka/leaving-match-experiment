@@ -5,21 +5,34 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
-func GetLogs() (model.GetLogResponse, error) {
+func GetLogs(userId int64, limit int64) (model.GetLogResponse, error) {
 	godotenv.Load("../.env")
 
 	apiKey := os.Getenv("API_KEY")
 	baseUrl := os.Getenv("STAY_WATCH_URL")
 	endpoint := os.Getenv("STAY_WATCH_LOGS")
 
-	apiUrl := fmt.Sprintf("%s%s", baseUrl, endpoint)
+	apiUrl, err := url.Parse(fmt.Sprintf("%s%s", baseUrl, endpoint))
+	if err != nil {
+		return model.GetLogResponse{}, fmt.Errorf("URLの構築に失敗しました: %v", err)
+	}
+	q := apiUrl.Query()
+	if userId != 0 {
+		q.Set("user-id", strconv.FormatInt(userId, 10))
+	}
+	if limit != 0 {
+		q.Set("limit", strconv.FormatInt(limit, 10))
+	}
+	apiUrl.RawQuery = q.Encode()
 
-	req, err := http.NewRequest("GET", apiUrl, nil)
+	req, err := http.NewRequest("GET", apiUrl.String(), nil)
 	if err != nil {
 		return model.GetLogResponse{}, fmt.Errorf("リクエスト作成に失敗しました: %v", err)
 	}
